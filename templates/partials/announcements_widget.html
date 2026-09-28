@@ -1,0 +1,16 @@
+<div class="bg-white rounded-xl border border-slate-200 shadow-sm">
+    <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center">
+        <h3 class="font-semibold text-slate-800">📢 Recent Announcements</h3>
+        <a href="{% url 'announcement_list' %}" class="text-xs text-brand-600 hover:underline">View all</a>
+    </div>
+    <div class="divide-y divide-slate-100">
+        {% for a in announcements %}
+        <div class="px-5 py-3">
+            <p class="text-sm font-medium text-slate-800">{{ a.title }}</p>
+            <p class="text-xs text-slate-500 mt-0.5">{{ a.created_at|date:"M d, Y" }} · {{ a.get_audience_display }}</p>
+        </div>
+        {% empty %}
+        <p class="px-5 py-4 text-sm text-slate-400">No announcements yet.</p>
+        {% endfor %}
+    </div>
+</div>

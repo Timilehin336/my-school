@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard - EduManage{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-bold text-slate-800 mb-1">Welcome back, {{ user.first_name|default:user.username }} 👋</h1>
+<p class="text-slate-500 mb-6">Here's what's happening at your school today.</p>
+
+{% if pending_signups %}
+<a href="/admin/accounts/signuprequest/?status__exact=pending" class="block mb-6 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 px-5 py-3 text-sm hover:bg-amber-100">
+    ⏳ <strong>{{ pending_signups }}</strong> signup request{{ pending_signups|pluralize }} waiting for your approval — review now →
+</a>
+{% endif %}
+
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+    {% include "partials/stat_card.html" with label="Total Students" value=total_students %}
+    {% include "partials/stat_card.html" with label="Total Teachers" value=total_teachers %}
+    {% include "partials/stat_card.html" with label="Fees Collected" value=fees_collected %}
+    {% include "partials/stat_card.html" with label="Present Today" value=attendance_today %}
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+        <h3 class="font-semibold text-slate-800 mb-4">Quick Actions</h3>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <a href="{% url 'student_create' %}" class="text-center px-3 py-4 rounded-lg bg-brand-50 text-brand-700 hover:bg-brand-100 text-sm font-medium">➕ Admit Student</a>
+            <a href="{% url 'student_list' %}" class="text-center px-3 py-4 rounded-lg bg-slate-50 text-slate-700 hover:bg-slate-100 text-sm font-medium">🧑‍🎓 View Students</a>
+            <a href="{% url 'teacher_list' %}" class="text-center px-3 py-4 rounded-lg bg-slate-50 text-slate-700 hover:bg-slate-100 text-sm font-medium">👩‍🏫 View Teachers</a>
+            <a href="{% url 'invoice_list' %}" class="text-center px-3 py-4 rounded-lg bg-slate-50 text-slate-700 hover:bg-slate-100 text-sm font-medium">💳 Fees &amp; Invoices</a>
+            <a href="{% url 'exam_list' %}" class="text-center px-3 py-4 rounded-lg bg-slate-50 text-slate-700 hover:bg-slate-100 text-sm font-medium">📝 Exams</a>
+            <a href="{% url 'announcement_create' %}" class="text-center px-3 py-4 rounded-lg bg-slate-50 text-slate-700 hover:bg-slate-100 text-sm font-medium">📢 Post Announcement</a>
+        </div>
+        <p class="text-xs text-slate-400 mt-4">Manage classes, sections, subjects and timetables from the <a href="/admin/" class="underline">Admin Panel</a>.</p>
+    </div>
+    {% include "partials/announcements_widget.html" %}
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Teachers - EduManage{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-bold text-slate-800 mb-6">Teachers</h1>
+<div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-x-auto">
+    <table class="w-full text-sm">
+        <thead class="bg-slate-50 text-left text-slate-500">
+            <tr><th class="px-4 py-3">Staff ID</th><th class="px-4 py-3">Name</th><th class="px-4 py-3">Subjects</th><th class="px-4 py-3">Classes</th><th class="px-4 py-3"></th></tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+        {% for t in teachers %}
+            <tr class="hover:bg-slate-50">
+                <td class="px-4 py-3">{{ t.staff_id }}</td>
+                <td class="px-4 py-3 font-medium text-slate-800">{{ t.user.get_full_name }}</td>
+                <td class="px-4 py-3">{% for s in t.subjects.all %}{{ s.name }}{% if not forloop.last %}, {% endif %}{% empty %}—{% endfor %}</td>
+                <td class="px-4 py-3">{% for c in t.classes_taught.all %}{{ c.name }}{% if not forloop.last %}, {% endif %}{% empty %}—{% endfor %}</td>
+                <td class="px-4 py-3 text-right"><a href="{% url 'teacher_detail' t.pk %}" class="text-brand-600 hover:underline">View</a></td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="5" class="px-4 py-6 text-center text-slate-400">No teachers found.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

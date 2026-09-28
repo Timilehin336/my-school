@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Approve Signup - EduManage{% endblock %}
+{% block content %}{% include "registration/_approve_card.html" %}{% endblock %}
+{% block auth_content %}
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-brand-700 to-brand-500 px-4 py-10">
+    {% include "registration/_approve_card.html" %}
+</div>
+{% endblock %}

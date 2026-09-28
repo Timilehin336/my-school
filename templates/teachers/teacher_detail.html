@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ teacher.user.get_full_name }} - EduManage{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-bold text-slate-800 mb-1">{{ teacher.user.get_full_name }}</h1>
+<p class="text-slate-500 mb-6">{{ teacher.staff_id }} · {{ teacher.qualification|default:"—" }}</p>
+
+<div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 max-w-xl">
+    <dl class="text-sm space-y-2">
+        <div class="flex justify-between"><dt class="text-slate-500">Email</dt><dd>{{ teacher.user.email|default:"—" }}</dd></div>
+        <div class="flex justify-between"><dt class="text-slate-500">Phone</dt><dd>{{ teacher.phone|default:"—" }}</dd></div>
+        <div class="flex justify-between"><dt class="text-slate-500">Joined</dt><dd>{{ teacher.date_joined_school }}</dd></div>
+        <div class="flex justify-between"><dt class="text-slate-500">Subjects</dt><dd>{% for s in teacher.subjects.all %}{{ s.name }}{% if not forloop.last %}, {% endif %}{% empty %}—{% endfor %}</dd></div>
+        <div class="flex justify-between"><dt class="text-slate-500">Classes</dt><dd>{% for c in teacher.classes_taught.all %}{{ c.name }}{% if not forloop.last %}, {% endif %}{% empty %}—{% endfor %}</dd></div>
+    </dl>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}My Books - EduManage{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-bold text-slate-800 mb-6">My Borrowed Books</h1>
+<div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-x-auto">
+    <table class="w-full text-sm">
+        <thead class="bg-slate-50 text-left text-slate-500">
+            <tr><th class="px-4 py-3">Book</th><th class="px-4 py-3">Issued</th><th class="px-4 py-3">Due</th><th class="px-4 py-3">Status</th></tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+        {% for issue in issues %}
+            <tr>
+                <td class="px-4 py-3 font-medium text-slate-800">{{ issue.book.title }}</td>
+                <td class="px-4 py-3">{{ issue.issued_on }}</td>
+                <td class="px-4 py-3">{{ issue.due_date }}</td>
+                <td class="px-4 py-3">
+                    {% if issue.returned_on %}
+                    <span class="px-2 py-1 rounded-full text-xs bg-green-50 text-green-700">Returned {{ issue.returned_on }}</span>
+                    {% elif issue.is_overdue %}
+                    <span class="px-2 py-1 rounded-full text-xs bg-red-50 text-red-700">Overdue</span>
+                    {% else %}
+                    <span class="px-2 py-1 rounded-full text-xs bg-amber-50 text-amber-700">Borrowed</span>
+                    {% endif %}
+                </td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="4" class="px-4 py-6 text-center text-slate-400">No borrowed books.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Mark Attendance - EduManage{% endblock %}
+{% block content %}
+<div class="flex justify-between items-center mb-6 flex-wrap gap-3">
+    <h1 class="text-2xl font-bold text-slate-800">Mark Attendance — {{ section }}</h1>
+    <form method="get" class="flex items-center gap-2">
+        <input type="date" name="date" value="{{ selected_date|date:'Y-m-d' }}" onchange="this.form.submit()"
+            class="rounded-lg border border-slate-300 px-3 py-2 text-sm">
+    </form>
+</div>
+
+<form method="post" class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-x-auto">
+    {% csrf_token %}
+    <table class="w-full text-sm">
+        <thead class="bg-slate-50 text-left text-slate-500">
+            <tr><th class="px-4 py-3">Admission #</th><th class="px-4 py-3">Name</th><th class="px-4 py-3">Status</th></tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+        {% for student, record in rows %}
+            <tr>
+                <td class="px-4 py-3">{{ student.admission_number }}</td>
+                <td class="px-4 py-3 font-medium text-slate-800">{{ student.user.get_full_name }}</td>
+                <td class="px-4 py-3">
+                    <select name="status_{{ student.pk }}" class="rounded-lg border border-slate-300 px-2 py-1.5 text-sm">
+                        {% for value, label in statuses %}
+                        <option value="{{ value }}" {% if record.status == value or not record and value == "present" %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="3" class="px-4 py-6 text-center text-slate-400">No active students in this section.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="p-4">
+        <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium px-5 py-2.5 rounded-lg">Save Attendance</button>
+        <a href="{% url 'attendance_report' section.pk %}" class="ml-2 text-sm px-5 py-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 inline-block">View Report</a>
+    </div>
+</form>
+{% endblock %}

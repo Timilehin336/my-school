@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}{{ student.user.get_full_name }} - EduManage{% endblock %}
+{% block content %}
+<div class="flex justify-between items-start mb-6 flex-wrap gap-3">
+    <div>
+        <h1 class="text-2xl font-bold text-slate-800">{{ student.user.get_full_name }}</h1>
+        <p class="text-slate-500">{{ student.admission_number }} · {{ student.school_class }} {{ student.section }}</p>
+    </div>
+    {% if is_admin_role %}
+    <a href="{% url 'student_edit' student.pk %}" class="text-sm px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200">✏️ Edit</a>
+    {% endif %}
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+        <h3 class="font-semibold text-slate-800 mb-3">Personal Info</h3>
+        <dl class="text-sm space-y-2">
+            <div class="flex justify-between"><dt class="text-slate-500">Date of Birth</dt><dd>{{ student.date_of_birth|default:"—" }}</dd></div>
+            <div class="flex justify-between"><dt class="text-slate-500">Gender</dt><dd>{{ student.get_gender_display|default:"—" }}</dd></div>
+            <div class="flex justify-between"><dt class="text-slate-500">Email</dt><dd>{{ student.user.email|default:"—" }}</dd></div>
+            <div class="flex justify-between"><dt class="text-slate-500">Address</dt><dd>{{ student.address|default:"—" }}</dd></div>
+            <div class="flex justify-between"><dt class="text-slate-500">Status</dt><dd>{{ student.get_status_display }}</dd></div>
+            <div class="flex justify-between"><dt class="text-slate-500">Admitted</dt><dd>{{ student.admission_date }}</dd></div>
+        </dl>
+    </div>
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+        <h3 class="font-semibold text-slate-800 mb-3">Guardian Info</h3>
+        <dl class="text-sm space-y-2">
+            <div class="flex justify-between"><dt class="text-slate-500">Name</dt><dd>{{ student.guardian_name|default:"—" }}</dd></div>
+            <div class="flex justify-between"><dt class="text-slate-500">Relationship</dt><dd>{{ student.guardian_relationship|default:"—" }}</dd></div>
+            <div class="flex justify-between"><dt class="text-slate-500">Phone</dt><dd>{{ student.guardian_phone|default:"—" }}</dd></div>
+            <div class="flex justify-between"><dt class="text-slate-500">Email</dt><dd>{{ student.guardian_email|default:"—" }}</dd></div>
+        </dl>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Library - EduManage{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-bold text-slate-800 mb-6">Library Catalog</h1>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+{% for book in books %}
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+        <p class="font-semibold text-slate-800">{{ book.title }}</p>
+        <p class="text-sm text-slate-500">{{ book.author|default:"Unknown author" }}</p>
+        <p class="text-xs text-slate-400 mt-1">{{ book.category|default:"Uncategorized" }}</p>
+        <div class="mt-3">
+            <span class="px-2 py-1 rounded-full text-xs {% if book.available_copies > 0 %}bg-green-50 text-green-700{% else %}bg-red-50 text-red-700{% endif %}">
+                {{ book.available_copies }} of {{ book.total_copies }} available
+            </span>
+        </div>
+    </div>
+{% empty %}
+    <p class="text-slate-400 col-span-full">No books in the catalog yet. Add some in the Admin Panel.</p>
+{% endfor %}
+</div>
+{% endblock %}

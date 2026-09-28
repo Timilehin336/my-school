@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Student Dashboard - EduManage{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-bold text-slate-800 mb-1">Hi, {{ user.first_name|default:user.username }} 👋</h1>
+<p class="text-slate-500 mb-6">{{ profile.admission_number }} · {{ profile.school_class }} {{ profile.section }}</p>
+
+<div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+    {% include "partials/stat_card.html" with label="Attendance" value=attendance_pct|default:"N/A" %}
+    {% include "partials/stat_card.html" with label="Class" value=profile.school_class %}
+    {% include "partials/stat_card.html" with label="Status" value=profile.get_status_display %}
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 space-y-6">
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+            <h3 class="font-semibold text-slate-800 mb-3">Recent Marks</h3>
+            {% if marks %}
+            <table class="w-full text-sm">
+                <thead><tr class="text-left text-slate-500 border-b border-slate-100">
+                    <th class="py-2">Subject</th><th>Exam</th><th>Score</th><th>Grade</th>
+                </tr></thead>
+                <tbody>
+                {% for m in marks %}
+                <tr class="border-b border-slate-50">
+                    <td class="py-2">{{ m.subject }}</td>
+                    <td>{{ m.exam }}</td>
+                    <td>{{ m.marks_obtained }}/{{ m.max_marks }}</td>
+                    <td>{{ m.grade_letter }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="text-sm text-slate-400">No marks recorded yet.</p>
+            {% endif %}
+        </div>
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+            <h3 class="font-semibold text-slate-800 mb-3">Recent Invoices</h3>
+            {% for inv in invoices %}
+            <a href="{% url 'invoice_detail' inv.pk %}" class="flex justify-between items-center py-2 border-b border-slate-50 last:border-0 text-sm hover:bg-slate-50 -mx-2 px-2 rounded">
+                <span>{{ inv.category }}</span>
+                <span class="font-medium">{{ inv.amount }} · {{ inv.get_status_display }}</span>
+            </a>
+            {% empty %}
+            <p class="text-sm text-slate-400">No invoices yet.</p>
+            {% endfor %}
+        </div>
+        <div class="flex gap-2 flex-wrap">
+            <a href="{% url 'my_attendance' %}" class="text-xs px-3 py-2 rounded-md bg-slate-50 text-slate-700 hover:bg-slate-100">📅 My Attendance</a>
+            <a href="{% url 'my_issues' %}" class="text-xs px-3 py-2 rounded-md bg-slate-50 text-slate-700 hover:bg-slate-100">📖 My Library Books</a>
+            {% if profile.section %}
+            <a href="{% url 'timetable_view' profile.section.pk %}" class="text-xs px-3 py-2 rounded-md bg-slate-50 text-slate-700 hover:bg-slate-100">🗓️ Timetable</a>
+            {% endif %}
+        </div>
+    </div>
+    {% include "partials/announcements_widget.html" %}
+</div>
+{% endblock %}

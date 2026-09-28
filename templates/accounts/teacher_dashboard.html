@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Teacher Dashboard - EduManage{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-bold text-slate-800 mb-1">Welcome back, {{ user.first_name|default:user.username }} 👋</h1>
+<p class="text-slate-500 mb-6">{{ profile.staff_id|default:"" }} · {{ profile.qualification|default:"" }}</p>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+        <h3 class="font-semibold text-slate-800 mb-4">My Classes</h3>
+        {% if classes %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {% for c in classes %}
+            {% for section in c.sections.all %}
+            <div class="border border-slate-200 rounded-lg p-4">
+                <p class="font-medium text-slate-800">{{ section }}</p>
+                <div class="mt-2 flex gap-2 flex-wrap">
+                    <a href="{% url 'mark_attendance' section.pk %}" class="text-xs px-2.5 py-1.5 rounded-md bg-brand-50 text-brand-700 hover:bg-brand-100">Mark Attendance</a>
+                    <a href="{% url 'timetable_view' section.pk %}" class="text-xs px-2.5 py-1.5 rounded-md bg-slate-100 text-slate-700 hover:bg-slate-200">Timetable</a>
+                </div>
+            </div>
+            {% endfor %}
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-sm text-slate-400">No classes assigned yet. Ask an admin to assign you to a class in the Admin Panel.</p>
+        {% endif %}
+        <div class="mt-5 flex gap-2 flex-wrap">
+            <a href="{% url 'student_list' %}" class="text-xs px-3 py-2 rounded-md bg-slate-50 text-slate-700 hover:bg-slate-100">🧑‍🎓 All Students</a>
+            <a href="{% url 'exam_list' %}" class="text-xs px-3 py-2 rounded-md bg-slate-50 text-slate-700 hover:bg-slate-100">📝 Exams &amp; Marks</a>
+            <a href="{% url 'announcement_create' %}" class="text-xs px-3 py-2 rounded-md bg-slate-50 text-slate-700 hover:bg-slate-100">📢 Post Announcement</a>
+        </div>
+    </div>
+    {% include "partials/announcements_widget.html" %}
+</div>
+{% endblock %}

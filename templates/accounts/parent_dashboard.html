@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Parent Dashboard - EduManage{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-bold text-slate-800 mb-1">Welcome, {{ user.first_name|default:user.username }} 👋</h1>
+<p class="text-slate-500 mb-6">Overview of your {{ children.count }} child{{ children.count|pluralize:"ren" }}.</p>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 space-y-4">
+        {% for child in children %}
+        <a href="{% url 'student_detail' child.pk %}" class="block bg-white rounded-xl border border-slate-200 shadow-sm p-5 hover:border-brand-300">
+            <p class="font-semibold text-slate-800">{{ child.user.get_full_name }}</p>
+            <p class="text-sm text-slate-500">{{ child.admission_number }} · {{ child.school_class }} {{ child.section }}</p>
+        </a>
+        {% empty %}
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 text-sm text-slate-400">
+            No linked student records found. Contact the school office to link your account (matched by email).
+        </div>
+        {% endfor %}
+    </div>
+    {% include "partials/announcements_widget.html" %}
+</div>
+{% endblock %}
